@@ -118,7 +118,10 @@ fi
 if [ ${#ITEMS[@]} -gt 0 ] && [ $DRY -eq 0 ]; then
   echo
   printf "Delete these? (y/n) "
-  { read -r ans < /dev/tty; } 2>/dev/null || read -r ans
+  # Read the answer from the keyboard, even when the script itself comes from curl.
+  # With no keyboard at all, answer "n" so nothing is deleted.
+  ans=n
+  { read -r ans < /dev/tty; } 2>/dev/null || { [ -t 0 ] && read -r ans; }
   if [[ "$ans" =~ ^[Yy] ]]; then
     before=$(free_kb)
     for p in "${ITEMS[@]}"; do rm -rf "$p" 2>/dev/null; done
