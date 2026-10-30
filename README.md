@@ -2,10 +2,12 @@
 
 # 🧹 srt-clean
 
-**Free up space on your Mac with one command, without losing anything you need.**
+**Free up space on your Mac or Windows PC with one command, without losing anything you need.**
 
 ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows11&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
+![PowerShell](https://img.shields.io/badge/PowerShell-5391FE?style=for-the-badge&logo=powershell&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 </div>
@@ -14,13 +16,25 @@
 
 ## 🚀 Quick start
 
+### 🍎 Mac
+
 Open **Terminal**, paste this line and press **Enter**:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sawrav90ss/srt-clean/main/srt-clean.sh | bash
 ```
 
-That's it. You don't need to install anything. srt-clean scans your Mac, shows you what it found and how big it is, and asks before it deletes anything:
+### 🪟 Windows
+
+Open **PowerShell** (press the Windows key, type `PowerShell`, press Enter), paste this line and press **Enter**:
+
+```powershell
+irm https://raw.githubusercontent.com/sawrav90ss/srt-clean/main/srt-clean.ps1 | iex
+```
+
+> **Tip:** right-click PowerShell and choose **Run as administrator** to also clean Windows temp files and Windows Update leftovers.
+
+That's it. You don't need to install anything. srt-clean scans your computer, shows you what it found and how big it is, and asks before it deletes anything:
 
 ```
 Delete these? (y/n)
@@ -32,17 +46,25 @@ Type `y` to clean, or `n` to leave everything as it is.
 
 ### Just want to look?
 
-Add `--dry-run` to see the list without deleting anything:
+See the list without deleting anything:
 
 ```bash
+# Mac
 curl -fsSL https://raw.githubusercontent.com/sawrav90ss/srt-clean/main/srt-clean.sh | bash -s -- --dry-run
+```
+
+```powershell
+# Windows
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sawrav90ss/srt-clean/main/srt-clean.ps1))) -DryRun
 ```
 
 ---
 
 ## 🧽 What it cleans
 
-srt-clean finds these on its own, for **every app** on your Mac. You don't need to tell it which apps you use.
+srt-clean finds these on its own, for **every app** on your computer. You don't need to tell it which apps you use.
+
+### 🍎 Mac
 
 | What | Where it looks | Examples |
 |---|---|---|
@@ -52,6 +74,18 @@ srt-clean finds these on its own, for **every app** on your Mac. You don't need 
 | Logs and crash reports | `~/Library/Logs` | Every app |
 | Developer build files | Xcode `DerivedData`, npm cache | Xcode, Node.js |
 
+### 🪟 Windows
+
+| What | Where it looks | Examples |
+|---|---|---|
+| Temp files older than a day | `%TEMP%` | Installers, apps, Windows |
+| Browser and app caches | `Cache`, `Code Cache`, `GPUCache`, `cache2` folders in `AppData` | Chrome, Edge, Firefox, Discord, Slack, VS Code |
+| Graphics shader caches | `DXCache`, `GLCache`, `D3DSCache` | NVIDIA, AMD, DirectX games |
+| Video editing caches | Adobe media cache, `CacheClip` | Premiere Pro, After Effects, DaVinci Resolve |
+| Crash dumps and error reports | `CrashDumps`, `WER` | Every app |
+| Developer caches | npm, pip, yarn | Node.js, Python |
+| **As administrator:** system leftovers | `Windows\Temp`, Windows Update downloads, Delivery Optimization | Windows |
+
 All of these are **temporary files**. Apps rebuild them automatically when they need them.
 
 ## 🛡️ What it never touches
@@ -60,13 +94,14 @@ All of these are **temporary files**. Apps rebuild them automatically when they 
 - Passwords, logins, cookies, bookmarks and browser history
 - Original media and proxies in Final Cut libraries
 - Apple system caches
-- The Trash. Empty it yourself when you're ready.
+- The Trash on Mac and the Recycle Bin on Windows. Empty them yourself when you're ready.
 
 ## 🧠 How it stays safe
 
-- **Running apps are skipped.** Before it deletes anything, srt-clean checks which apps are open and which files they're using. It leaves those caches alone, so nothing breaks while you work.
+- **Running apps are skipped.** Before it deletes anything, srt-clean checks which apps are open. It leaves their caches alone, so nothing breaks while you work.
+- **Double check on Windows.** Right before deleting a folder, srt-clean tries to rename it. Windows refuses that while any program is using a file inside, and srt-clean then leaves the folder alone.
 - **It asks first.** You see the full list and the total size before anything is deleted.
-- **Big decisions stay yours.** Large apps you haven't opened in 90+ days and leftover installers (`.dmg`, `.pkg`) are **listed only**, never deleted.
+- **Big decisions stay yours.** Large apps, leftover installers (`.dmg`, `.pkg`, `.exe`, `.msi`, `.iso`), the Recycle Bin and `Windows.old` are **listed only**, never deleted.
 
 ## 📋 Example output
 
@@ -93,7 +128,7 @@ Not deleted, review these yourself:
 
 ## 💡 Tips
 
-- **Quit your apps first** (`⌘ + Q`, not just closing the window). srt-clean can then clean their caches too.
+- **Quit your apps first** (`⌘ + Q` on Mac; on Windows, also quit apps from the system tray). srt-clean can then clean their caches too.
 - **Run it once a month** or whenever your disk is getting full.
 - Caches grow back over time as you use your apps. That's normal.
 
@@ -102,14 +137,22 @@ Not deleted, review these yourself:
 If you'd rather download it first:
 
 ```bash
+# Mac
 curl -fsSL -o srt-clean.sh https://raw.githubusercontent.com/sawrav90ss/srt-clean/main/srt-clean.sh
 bash srt-clean.sh
 ```
 
+```powershell
+# Windows
+irm https://raw.githubusercontent.com/sawrav90ss/srt-clean/main/srt-clean.ps1 -OutFile srt-clean.ps1
+powershell -ExecutionPolicy Bypass -File .\srt-clean.ps1
+```
+
 ## ✅ Requirements
 
-- macOS (tested on macOS 15 Sequoia)
-- Nothing to install. It only uses tools that come with every Mac.
+- **Mac:** macOS (tested on macOS 15 Sequoia)
+- **Windows:** Windows 10 or 11 with the built-in PowerShell
+- Nothing to install. It only uses tools that come with your computer.
 
 ## 📄 License
 
