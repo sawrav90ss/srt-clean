@@ -2,7 +2,8 @@
 
 # 🧹 srt-clean
 
-**Free up space on your Mac or Windows PC with one command, without losing anything you need.**
+**A free Mac cleaner and Windows PC cleaner.**
+Free up disk space with one command, without losing anything you need.
 
 ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)
 ![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows11&logoColor=white)
@@ -157,3 +158,11 @@ powershell -ExecutionPolicy Bypass -File .\srt-clean.ps1
 ## 📄 License
 
 [MIT](LICENSE). Free to use, share and change.
+
+---
+
+<div align="center">
+
+Made by **[Sawrav Biswas](https://github.com/sawrav90ss)** · [sawrav.online](https://www.sawrav.online)
+
+</div>
